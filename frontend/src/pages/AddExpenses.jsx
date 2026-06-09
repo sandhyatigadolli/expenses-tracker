@@ -173,7 +173,6 @@ useEffect(() => {
 ]);
   
 
-  const handleStartDateChange = (e) => setStartDate(e.target.value);
 
   const handleAddExpense = async () => {
     const finalType = expenseType === "Other" ? customExpenseType : expenseType;

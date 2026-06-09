@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import {
@@ -21,16 +21,6 @@ import { Edit, Delete } from "@mui/icons-material";
 import axios from "axios";
 
 
-
-function parse(str) {
-  if (!str) return null;
-  const d = new Date(str);
-  return isNaN(d) ? null : d;
-}
-function fmt(date) {
-  if (!(date instanceof Date) || isNaN(date)) return "";
-  return date.toISOString().slice(0, 10);
-}
 
 
 export default function SetGoal() {
