@@ -1,38 +1,56 @@
 package com.expensetracker.backend.controller;
 
 import com.expensetracker.backend.model.Income;
-import com.expensetracker.backend.repository.IncomeRepository;
-import java.util.List;
+import com.expensetracker.backend.service.IncomeService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/income")
+@RequestMapping("/api/incomes")
 @CrossOrigin(origins = "http://localhost:3000")
 public class IncomeController {
 
     @Autowired
-    private IncomeRepository incomeRepository;
+    private IncomeService incomeService;
 
+    // Get incomes by user
+    @GetMapping("/user/{userId}")
+    public List<Income> getIncomesByUser(
+            @PathVariable Long userId) {
+
+        return incomeService.getIncomesByUser(userId);
+    }
+
+    // Add income
     @PostMapping
-    public Income addIncome(@RequestBody Income income) {
-        return incomeRepository.save(income);
+    public Income addIncome(
+            @RequestBody Income income) {
+
+        return incomeService.addIncome(income);
     }
 
-    @GetMapping
-    public List<Income> getAllIncome() {
-        return incomeRepository.findAll();
-    }
-
+    // Update income
     @PutMapping("/{id}")
-    public Income updateIncome(@PathVariable Long id, @RequestBody Income updatedIncome) {
-        Income income = incomeRepository.findById(id).orElseThrow();
-        income.setAmount(updatedIncome.getAmount());
-        return incomeRepository.save(income);
+    public Income updateIncome(
+            @PathVariable Long id,
+            @RequestBody Income incomeDetails) {
+
+        return incomeService.updateIncome(
+                id,
+                incomeDetails
+        );
     }
 
+    // Delete income
     @DeleteMapping("/{id}")
-    public void deleteIncome(@PathVariable Long id) {
-        incomeRepository.deleteById(id);
+    public String deleteIncome(
+            @PathVariable Long id) {
+
+        incomeService.deleteIncome(id);
+
+        return "Income deleted successfully";
     }
 }

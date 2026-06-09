@@ -2,40 +2,50 @@ package com.expensetracker.backend.controller;
 
 import com.expensetracker.backend.model.Expense;
 import com.expensetracker.backend.service.ExpenseService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/expenses")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class ExpenseController {
 
-    @Autowired
-    private ExpenseService expenseService;  // ✅ FIX: Define the service
-
-    @GetMapping
-    public List<Expense> getAllExpenses() {
-        return expenseService.getAllExpenses();
+    private final ExpenseService expenseService;
+    public ExpenseController(ExpenseService expenseService) {
+        this.expenseService = expenseService;
     }
 
     @PostMapping
-    public Expense createExpense(@RequestBody Expense expense) {
-        if (expense.getAmount() == 0.0 || expense.getDescription() == null || expense.getDescription().isEmpty()) {
-            throw new IllegalArgumentException("Amount and description are required.");
-        }
-        return expenseService.saveExpense(expense);
+    public ResponseEntity<Expense> addExpense(@RequestBody Expense expense) {
+        return ResponseEntity.ok(expenseService.addExpense(expense));
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteExpense(@PathVariable Long id) {
-        expenseService.deleteExpense(id);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Expense>> getExpensesByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(expenseService.getAllExpensesForUser(userId));
+    }
+
+
+    @GetMapping("/user/{userId}/total")
+    public ResponseEntity<Double> getTotalExpensesForPeriod(
+            @PathVariable Long userId,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate) {
+        return ResponseEntity.ok(expenseService.getTotalExpensesForPeriod(userId, startDate, endDate));
     }
 
     @PutMapping("/{id}")
-    public Expense updateExpense(@PathVariable Long id, @RequestBody Expense expense) {
-        return expenseService.updateExpense(id, expense);
+    public ResponseEntity<Expense> updateExpense(@PathVariable Long id, @RequestBody Expense expense) {
+        return ResponseEntity.ok(expenseService.updateExpense(id, expense));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
+        expenseService.deleteExpense(id);
+        return ResponseEntity.noContent().build();
     }
 }

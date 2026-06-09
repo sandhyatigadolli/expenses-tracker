@@ -1,4 +1,4 @@
-package com.expensetracker.backend.services;
+package com.expensetracker.backend.service;
 
 import java.util.Collection;
 import java.util.Objects;
