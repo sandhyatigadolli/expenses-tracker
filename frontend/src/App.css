@@ -1,0 +1,29 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+form input {
+  margin: 5px;
+  padding: 8px;
+}
+
+button {
+  padding: 8px 12px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+/* Custom styling for react-datepicker */
+.date-picker {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
